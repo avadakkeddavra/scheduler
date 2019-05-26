@@ -1,0 +1,39 @@
+<h1 mat-dialog-title>Create a new Event</h1>
+<div mat-dialog-content>
+  <form #form="ngForm">
+    <mat-form-field>
+      <input type="text" matInput name="name" [(ngModel)]="event.title" placeholder="Event name" required>
+    </mat-form-field>
+    <div class="chooseTime">
+      <mat-form-field  class="startTime">
+        <mat-label>Start time</mat-label>
+        <mat-select required [disabled]="useCustom" name="start" [(ngModel)]="event.start" (ngModelChange)="onTimeChanged('start')">
+          <mat-option *ngFor="let time of times" [value]="time.value">
+            {{time.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field >
+      <mat-form-field  class="endTime">
+        <mat-label>End time</mat-label>
+        <mat-select required [disabled]="useCustom" name="end" [(ngModel)]="event.end">
+          <mat-option *ngFor="let time of times" [value]="time.value">
+            {{time.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field >
+    </div>
+
+    <mat-form-field>
+      <input matInput required [matDatepicker]="picker" placeholder="Choose a date" name="date" [(ngModel)]="event.date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button [mat-dialog-close]="event" [disabled]="disabled" color="primary" cdkFocusInitial><mat-icon>save</mat-icon>Save</button>
+  <button mat-raised-button  (click)="onNoClick()" color="warn">
+    <mat-icon>close</mat-icon>Close
+  </button>
+</div>

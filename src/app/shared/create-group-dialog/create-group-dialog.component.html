@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>Create a new Event</h1>
+<div mat-dialog-content>
+  <form #form="ngForm">
+    <mat-form-field>
+      <input type="text" matInput name="name" [(ngModel)]="group.name" placeholder="Group number" required>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Cafedra</mat-label>
+      <mat-select required name="cafedra" [(ngModel)]="group.cafedra_id">
+        <mat-option *ngFor="let caf of data.cafedras" [value]="caf.id">
+          {{caf.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field >
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button
+    mat-raised-button
+    [mat-dialog-close]="group"
+    [disabled]="group.name.length === 0 || form.untouched"
+    color="{{type === 'edit' ? 'accent' : 'primary' }}"
+    cdkFocusInitial>
+    <mat-icon>{{type === 'edit' ? 'edit' : 'save' }}</mat-icon>
+    {{type === 'edit' ? 'Edit' : 'Create' }}
+  </button>
+  <button mat-raised-button  (click)="onNoClick()" color="warn">
+    <mat-icon>close</mat-icon>Close
+  </button>
+</div>

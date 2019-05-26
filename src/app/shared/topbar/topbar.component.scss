@@ -1,0 +1,78 @@
+$mainHeader: #2756ee;
+.logo{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 20px;
+  font-size: 15px;
+  font-weight: 500;
+  mat-icon{
+    margin-right: 10px;
+  }
+}
+a.active{
+  background-color: rgba(76, 125, 255, 0.67);
+}
+header{
+  background-color: $mainHeader;
+  position: relative;
+  color: #ffffff;
+  .overlay{
+    position: absolute;
+    width: 50%;
+    right: 100px;
+    top: 80px;
+    z-index: 0;
+    height: 80%;
+    background: url('/assets/images/bg4.png');
+    -webkit-background-size: cover !important;
+    background-size: cover !important;
+    box-shadow: -2px -2px 2px 0 rgba(46, 46, 46, 0.14), 0 3px 1px -2px rgba(87, 87, 87, 0.12), 0 1px 5px 0 rgba(149, 149, 149, 0.2);
+
+  }
+  h1{
+    margin-bottom: 10px;
+    font-size: 30px;
+  }
+  p{
+    line-height: 25px;
+    margin: 20px 0px;
+  }
+}
+section.search{
+  padding: 80px;
+  height: 500px;
+  margin-bottom: 50px;
+  position: relative;
+  input.search-input{
+    height: 40px;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    border: none;
+    outline: none;
+    width: 500px;
+    border-radius: 3px;
+    padding: 0px 10px;
+  }
+}
+::ng-deep{
+  .mat-toolbar{
+    background-color: $mainHeader;
+    padding-left: 75px;
+    color: #ffffff;
+  }
+}
+
+@media(max-width: 1400px) {
+  header > .overlay{
+    position: relative;
+    width: 90%;
+    height: 300px;
+    margin: 30px auto;
+    margin-bottom: -10px;
+    right: auto;
+    top: auto;
+  }
+  section.search{
+    height: auto;
+  }
+}

@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>Create a new Event</h1>
+<div mat-dialog-content>
+  <form #form="ngForm">
+    <mat-form-field *ngIf="Teacher.token">
+      <input type="text" matInput name="token" disabled [(ngModel)]="Teacher.token" placeholder="Access Token">
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput name="name" [(ngModel)]="Teacher.name" placeholder="Full name" required>
+    </mat-form-field>
+    <mat-form-field  class="startTime">
+      <mat-label>Cafedra</mat-label>
+      <mat-select required name="cafedra" [(ngModel)]="Teacher.cafedra_id">
+        <mat-option *ngFor="let caf of data.cafedras" [value]="caf.id">
+          {{caf.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput name="position" [(ngModel)]="Teacher.position" placeholder="Position" required>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button [mat-dialog-close]="Teacher" [disabled]="isDisabled() || form.untouched" color="primary" cdkFocusInitial><mat-icon>save</mat-icon>Save</button>
+  <button mat-raised-button  (click)="onNoClick()" color="warn">
+    <mat-icon>close</mat-icon>Close
+  </button>
+</div>

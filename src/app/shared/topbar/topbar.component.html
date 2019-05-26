@@ -1,0 +1,22 @@
+<header>
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <span class="logo"><mat-icon>schedule</mat-icon> Scheduler</span>
+      <a mat-button routerLink="/admin" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Dashboard</a>
+      <a mat-button routerLink="/admin/groups" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active">Groups</a>
+      <a mat-button routerLink="/admin/cafedras" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Cafedras</a>
+      <a mat-button routerLink="/admin/teachers" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Teachers</a>
+      <a mat-button routerLink="/admin/timetable" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Timetable</a>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <section class="search" *ngIf="large">
+    <h1>Scheduler</h1>
+    <p>
+      This app can help you to don't miss and find your lesson <br/>
+      Just type your group number and <br/> you will see your current schedule and weekly schedule
+    </p>
+    <button mat-raised-button color="accent" (click)="letStart.emit()">Let's start</button>
+  </section>
+  <div class="overlay" *ngIf="large"></div>
+</header>
+

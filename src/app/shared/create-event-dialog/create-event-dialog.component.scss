@@ -1,0 +1,15 @@
+::ng-deep{
+  .mat-form-field{
+    display: block !important;
+    
+  }
+}
+
+.chooseTime{
+  display: flex;
+  font-weight: lighter;
+  justify-content: flex-start;
+  .startTime{
+    margin-right: 20px;
+  }
+}

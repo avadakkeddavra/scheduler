@@ -1,0 +1,23 @@
+section.dashboard{
+  background-color: #f9fafe;
+  border-radius: 5px;
+  min-height: 400px;
+  padding: 50px 0px;
+  box-shadow: 0 -4px 5px 0 rgba(14, 23, 47, 0.57), 0 1px 10px 0 rgba(39, 86, 238, 0.55), 0 2px 4px -1px rgba(36, 76, 181, 0.3);
+  h2{
+    text-align: center;
+    font-weight: 400;
+  }
+
+  .container{
+    padding: 0px 60px;
+  }
+}
+::ng-deep{
+  .cal-event-title{
+    color: #ffffff !important;
+  }
+}
+.event{
+  display: none;
+}

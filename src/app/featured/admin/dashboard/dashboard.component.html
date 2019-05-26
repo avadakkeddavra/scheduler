@@ -1,0 +1,108 @@
+<section class="container">
+  <div class="calendar-actions">
+    <div class="calendar-actions-group">
+      <button mat-raised-button color="primary" (click)="openDialog()">
+        <mat-icon>add</mat-icon> Add event
+      </button>
+    </div>
+    <div class="calendar-date">
+      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+    </div>
+    <div class="calendar-actions-group">
+      <button
+        mat-raised-button
+        class="btn btn-primary"
+        (click)="setView(CalendarView.Month)"
+        [class.active]="view === CalendarView.Month"
+      >
+        Month
+      </button>
+      <button
+        mat-raised-button
+        class="btn btn-primary"
+        (click)="setView(CalendarView.Week)"
+        [class.active]="view === CalendarView.Week"
+      >
+        Week
+      </button>
+      <button
+        mat-raised-button
+        class="btn btn-primary"
+        (click)="setView(CalendarView.Day)"
+        [class.active]="view === CalendarView.Day"
+      >
+        Day
+      </button>
+    </div>
+  </div>
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view
+      *ngSwitchCase="CalendarView.Month"
+      [viewDate]="viewDate"
+      [(events)]="events"
+      [refresh]="refresh"
+      [activeDayIsOpen]="activeDayIsOpen"
+      (dayClicked)="dayClicked($event.day)"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)"
+    >
+    </mwl-calendar-month-view>
+
+
+    <mwl-calendar-week-view
+      *ngSwitchCase="CalendarView.Week"
+      precision="minutes"
+      [weekStartsOn]="3"
+      [hourSegments]="4"
+      [dayStartHour]="8"
+      [refresh]="refresh"
+      [dayStartMinute]="0"
+      [dayEndHour]="14"
+      [viewDate]="viewDate"
+      [events]="events"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)">
+    </mwl-calendar-week-view>
+
+    <mwl-calendar-day-view
+      *ngSwitchCase="CalendarView.Day"
+      [viewDate]="viewDate"
+      [refresh]="refresh"
+      [events]="events"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)"
+    >
+    </mwl-calendar-day-view>
+  </div>
+  <div class="calendar-actions-bottom">
+    <div class="calendar-actions-group">
+      <button
+        mat-raised-button
+        mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
+        Previous
+      </button>
+      <button
+        mat-raised-button
+        color="accent"
+        mwlCalendarToday
+        [(viewDate)]="viewDate"
+      >
+        Today
+      </button>
+      <button
+        mat-raised-button
+        mwlCalendarNextView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+
+</section>

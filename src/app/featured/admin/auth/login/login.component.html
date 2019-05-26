@@ -1,0 +1,19 @@
+<section class="login">
+  <mat-icon class="logo">schedule</mat-icon>
+  <mat-card>
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+      <mat-form-field class="example-full-width">
+        <input matInput type="email" placeholder="Email" name="email" [(ngModel)]="User.email" required/>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <input matInput type="password" placeholder="Password" name="password" [(ngModel)]="User.password" required/>
+      </mat-form-field>
+
+      <div class="actions">
+        <button mat-raised-button color="accent">Login</button>
+        <button mat-raised-button color="primary">Forgot password</button>
+      </div>
+    </form>
+  </mat-card>
+</section>

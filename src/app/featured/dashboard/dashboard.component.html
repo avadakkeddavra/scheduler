@@ -1,0 +1,22 @@
+<app-topbar (letStart)="smoothScroll()" [large]="true"></app-topbar>
+<section class="dashboard" #main>
+  <h2>Find you lesson</h2>
+
+  <div class="container">
+    <div class="calendar">
+      <mwl-calendar-week-view
+        precision="minutes"
+        [weekStartsOn]="3"
+        [hourSegments]="4"
+        [dayStartHour]="8"
+        [dayStartMinute]="0"
+        [dayEndHour]="14"
+        [viewDate]="viewDate"
+        [events]="events"
+        (eventClicked)="handleEvent('Clicked', $event.event)"
+        (eventTimesChanged)="eventTimesChanged($event)">
+      </mwl-calendar-week-view>
+    </div>
+  </div>
+</section>
+

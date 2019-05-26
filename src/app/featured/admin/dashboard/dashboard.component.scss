@@ -1,0 +1,21 @@
+::ng-deep{
+  .cal-event-title{
+    color: #ffffff !important;
+  }
+}
+.container{
+  width: 90%;
+  margin: 50px auto;
+}
+.calendar-actions{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.calendar-actions-bottom{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 20px;
+}
