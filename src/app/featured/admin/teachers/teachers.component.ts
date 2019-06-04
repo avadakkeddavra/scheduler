@@ -37,7 +37,7 @@ export class TeachersComponent implements OnInit {
   }
 
   getTeachers() {
-    this.teacher.getAll(this.pagination).subscribe((data: any) => {
+    this.teacher.getAllWithPagination(this.pagination).subscribe((data: any) => {
       this.pagination.length = data.count;
       this.rebuildWithNewData(data.rows);
     });
@@ -157,5 +157,11 @@ export class TeachersComponent implements OnInit {
   onChangePage(page) {
     this.pagination = page;
     this.getTeachers();
+  }
+
+  refreshToken( data: Teacher) {
+    this.teacher.refreshToken(data.id).subscribe(token => {
+      data.token = token;
+    });
   }
 }

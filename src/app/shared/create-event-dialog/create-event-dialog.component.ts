@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, EventEmitter, Inject, Input, OnChanges, OnInit, Output} from '@angular/core';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 export const MY_FORMATS = {
@@ -26,43 +26,40 @@ export const MY_FORMATS = {
   ],
 })
 export class CreateEventDialogComponent {
-  times: {name: string, id: number}[];
-  useCustom = false;
-  event = {
-    date: '',
-    start: {
-      hours: 0,
-      minutes: 0
-    },
-    end: {
-      hours: 0,
-      minutes: 0
-    },
-    title: ''
-  }
-  disabled = true;
-  constructor(public dialogRef: MatDialogRef<CreateEventDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.times = this.data.times;
-  }
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
+  @Input() teachers;
+  @Input() groups;
+  @Input() days;
+  @Input() lessons;
+  @Input() times;
+  @Input() classes;
+  @Input() data;
+  @Input() type;
 
-  onTimeChanged(type: 'start' | 'end') {
-    const value = this.event[type];
-    if (type === 'start') {
-      if (value.hours > this.event.end.hours) {
-        this.disabled = true;
-      } else {
-        this.disabled = false;
-      }
-    } else {
-      if (value.hours < this.event.start.hours) {
-        this.disabled = true;
-      } else {
-        this.disabled = false;
-      }
+  @Output() search = new EventEmitter();
+  @Input() open = false;
+  @Output() close = new EventEmitter();
+  @Output() save = new EventEmitter();
+  @Output() delete = new EventEmitter();
+  @Output() update = new EventEmitter();
+
+  @Input() Event;
+
+  constructor() {}
+
+
+  DisplayFn(array) {
+    return (id: number) => {
+      const value = array.find((item) => item.id === id);
+      return value ? value.name : '';
     }
   }
+
+  handleClick() {
+    if(this.type === 'create') {
+      this.save.emit(this.Event)
+    } else {
+      this.update.emit({id: this.Event.id, data: this.Event})
+    }
+  }
+
 }

@@ -6,8 +6,10 @@ section{
     flex-direction: row;
     justify-content: space-between;
     margin-bottom: 20px;
-
   }
+}
+.pagination{
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
 }
 table {
   width: 100%;
@@ -16,18 +18,9 @@ table {
     mat-icon{
       font-size: 16px !important;
       color: #bcbcbc !important;
-      width: 30px;
       cursor: pointer;
+      width: 30px;
       height: auto !important ;
     }
   }
-}
-.token{
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-content: center;
-}
-.pagination{
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
 }

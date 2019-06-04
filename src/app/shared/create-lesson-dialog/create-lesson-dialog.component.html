@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>Create a new Lesson</h1>
+<div mat-dialog-content>
+  <form #form="ngForm">
+    <mat-form-field>
+      <input type="text" matInput name="name" [(ngModel)]="Lesson.name" placeholder="Lesson title" required>
+    </mat-form-field>
+    <mat-form-field  class="startTime">
+      <mat-label>Cafedra</mat-label>
+      <mat-select required name="cafedra" [(ngModel)]="Lesson.cafedra_id">
+        <mat-option *ngFor="let caf of data.cafedras" [value]="caf.id">
+          {{caf.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field  class="startTime">
+      <mat-label>Teacher</mat-label>
+      <mat-select required name="lesson" [(ngModel)]="Lesson.teacher_id">
+        <mat-option *ngFor="let teacher of data.teachers" [value]="teacher.id">
+          {{teacher.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button [mat-dialog-close]="Lesson" [disabled]="isDisabled() || form.untouched" color="primary" cdkFocusInitial><mat-icon>save</mat-icon>Save</button>
+  <button mat-raised-button  (click)="onNoClick()" color="warn">
+    <mat-icon>close</mat-icon>Close
+  </button>
+</div>

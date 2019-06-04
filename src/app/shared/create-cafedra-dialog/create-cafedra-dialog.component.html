@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>Create a new Cafedra</h1>
+<div mat-dialog-content>
+  <form #form="ngForm">
+    <mat-form-field>
+      <input type="text" matInput name="name" [(ngModel)]="cafedra.name" placeholder="Cafedra name" required>
+    </mat-form-field>
+  </form>
+</div>
+<div mat-dialog-actions>
+  <button
+    mat-raised-button
+    [mat-dialog-close]="cafedra"
+    [disabled]="cafedra.name.length === 0 || form.untouched"
+    color="{{type === 'edit' ? 'accent' : 'primary' }}"
+    cdkFocusInitial>
+    <mat-icon>{{type === 'edit' ? 'edit' : 'save' }}</mat-icon>
+    {{type === 'edit' ? 'Edit' : 'Create' }}
+  </button>
+  <button mat-raised-button  (click)="onNoClick()" color="warn">
+    <mat-icon>close</mat-icon>Close
+  </button>
+</div>

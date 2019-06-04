@@ -1,39 +1,143 @@
-<h1 mat-dialog-title>Create a new Event</h1>
-<div mat-dialog-content>
-  <form #form="ngForm">
-    <mat-form-field>
-      <input type="text" matInput name="name" [(ngModel)]="event.title" placeholder="Event name" required>
-    </mat-form-field>
-    <div class="chooseTime">
-      <mat-form-field  class="startTime">
-        <mat-label>Start time</mat-label>
-        <mat-select required [disabled]="useCustom" name="start" [(ngModel)]="event.start" (ngModelChange)="onTimeChanged('start')">
-          <mat-option *ngFor="let time of times" [value]="time.value">
-            {{time.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field >
-      <mat-form-field  class="endTime">
-        <mat-label>End time</mat-label>
-        <mat-select required [disabled]="useCustom" name="end" [(ngModel)]="event.end">
-          <mat-option *ngFor="let time of times" [value]="time.value">
-            {{time.name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field >
+<div class="overlay" *ngIf="open" (click)="close.emit()"></div>
+<section *ngIf="open">
+  <mat-card>
+    <h1 mat-dialog-title>Create a new Event</h1>
+    <div mat-dialog-content>
+      <form #form="ngForm">
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            required
+            autocomplete="off"
+            name="lesson"
+            [(ngModel)]="Event.lesson_id"
+            placeholder="Lessons"
+            aria-label="Lessons"
+            (input)="search.emit({type: 'lesson', data: searchLes.value})"
+            #searchLes
+            [matAutocomplete]="autoLesson">
+          <mat-autocomplete #autoLesson="matAutocomplete" [displayWith]="DisplayFn(lessons)">
+            <mat-option *ngFor="let lesson of lessons" [value]="lesson.id">
+              <span>{{lesson.name}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            required
+            name="teachers"
+            [(ngModel)]="Event.teacher_id"
+            placeholder="Teachers"
+            aria-label="Lessons"
+            (input)="search.emit({type: 'teacher', data: searchTeacher.value})"
+            #searchTeacher
+            [matAutocomplete]="autoTeacher">
+          <mat-autocomplete #autoTeacher="matAutocomplete" [displayWith]="DisplayFn(teachers)">
+            <mat-option *ngFor="let teacher of teachers" [value]="teacher.id">
+              <span>{{teacher.name}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            required
+            name="groups"
+            [(ngModel)]="Event.group_id"
+            placeholder="Groups"
+            aria-label="Groups"
+            (input)="search.emit({type: 'group', data: searchGroup.value})"
+            #searchGroup
+            [matAutocomplete]="autoGroup">
+          <mat-autocomplete #autoGroup="matAutocomplete" [displayWith]="DisplayFn(groups)">
+            <mat-option *ngFor="let group of groups" [value]="group.id">
+              <span>{{group.name}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            required
+            name="classes"
+            [(ngModel)]="Event.class_id"
+            placeholder="Classes"
+            aria-label="Classes"
+            (input)="search.emit({type: 'classes', data: searchClass.value})"
+            #searchClass
+            [matAutocomplete]="autoClass">
+          <mat-autocomplete disableRipple #autoClass="matAutocomplete" [displayWith]="DisplayFn(classes)">
+            <mat-option *ngFor="let class of classes" [value]="class.id">
+              <span>{{class.name}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Day</mat-label>
+          <mat-select required name="lesson" [(ngModel)]="Event.day_id">
+            <mat-option *ngFor="let day of days" [value]="day.id">
+              {{day.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="time">
+          <mat-form-field>
+            <mat-label>Start time</mat-label>
+            <mat-select required name="lesson" [(ngModel)]="Event.lesson_time_id">
+              <mat-option *ngFor="let time of times" [value]="time.id">
+                {{time.start}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>End time</mat-label>
+            <mat-select required name="lesson" [(ngModel)]="Event.lesson_time_id">
+              <mat-option *ngFor="let time of times" [value]="time.id">
+                {{time.end}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="time">
+          <mat-form-field>
+            <mat-label>Semester</mat-label>
+            <mat-select required name="semester" [(ngModel)]="Event.semester">
+              <mat-option  [value]="1">
+                1
+              </mat-option>
+              <mat-option  [value]="2">
+                2
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Determinant</mat-label>
+            <mat-select name="semester" [(ngModel)]="Event.denomirator">
+              <mat-option  [value]="1">
+                Числитель
+              </mat-option>
+              <mat-option  [value]="2">
+                Знаменатель
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
     </div>
-
-    <mat-form-field>
-      <input matInput required [matDatepicker]="picker" placeholder="Choose a date" name="date" [(ngModel)]="event.date">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
-
-  </form>
-</div>
-<div mat-dialog-actions>
-  <button mat-raised-button [mat-dialog-close]="event" [disabled]="disabled" color="primary" cdkFocusInitial><mat-icon>save</mat-icon>Save</button>
-  <button mat-raised-button  (click)="onNoClick()" color="warn">
-    <mat-icon>close</mat-icon>Close
-  </button>
-</div>
+    <div mat-dialog-actions class="actions">
+      <button
+        mat-raised-button
+        color="primary"
+        [disabled]="form.untouched || form.invalid"
+        cdkFocusInitial
+        (click)="handleClick()">
+        <mat-icon>{{type === 'create' ? 'save' : 'edit'}}</mat-icon>
+        Save
+      </button>
+      <button mat-raised-button color="accent" *ngIf="type === 'edit'" (click)="delete.emit(Event.id)">
+        <mat-icon>delete</mat-icon> Delete
+      </button>
+    </div>
+  </mat-card>
+</section>

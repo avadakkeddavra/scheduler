@@ -18,6 +18,40 @@ section.dashboard{
     color: #ffffff !important;
   }
 }
+::ng-deep{
+  .mat-form-field{
+    display: block !important;
+  }
+}
 .event{
   display: none;
+}
+
+::ng-deep{
+  .cal-event-title{
+    color: #ffffff !important;
+  }
+}
+form{
+  width: 50%;
+  margin: 0 auto;
+}
+h3{
+  text-align: center;
+}
+.container{
+  width: 90%;
+  margin: 50px auto;
+}
+.calendar-actions{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.calendar-actions-bottom{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 20px;
 }

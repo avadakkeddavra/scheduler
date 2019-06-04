@@ -2,13 +2,23 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  MatAutocompleteModule,
   MatButtonModule,
-  MatCardModule, MatCheckboxModule,
-  MatChipsModule, MatDatepickerModule, MatDialogModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatDatepickerModule,
+  MatDialogModule,
   MatFormFieldModule,
   MatGridListModule,
   MatIconModule,
-  MatInputModule, MatPaginatorModule, MatSelectModule, MatSlideToggleModule, MatSnackBarModule, MatTableModule
+  MatInputModule,
+  MatListModule,
+  MatPaginatorModule,
+  MatSelectModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatTableModule
 } from '@angular/material';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 
@@ -32,7 +42,9 @@ import {MatMomentDateModule} from '@angular/material-moment-adapter';
     MatTableModule,
     MatCheckboxModule,
     MatSnackBarModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatAutocompleteModule,
+    MatListModule
   ],
   exports: [
     MatToolbarModule,
@@ -51,7 +63,9 @@ import {MatMomentDateModule} from '@angular/material-moment-adapter';
     MatTableModule,
     MatCheckboxModule,
     MatSnackBarModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatAutocompleteModule,
+    MatListModule
   ]
 })
 export class MaterialModule { }

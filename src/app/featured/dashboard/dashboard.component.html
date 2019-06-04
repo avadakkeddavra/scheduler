@@ -1,22 +1,128 @@
 <app-topbar (letStart)="smoothScroll()" [large]="true"></app-topbar>
 <section class="dashboard" #main>
-  <h2>Find you lesson</h2>
-
+  <h3>Узнать расписание</h3>
   <div class="container">
-    <div class="calendar">
+      <form #form="ngForm">
+        <mat-form-field class="example-full-width">
+          <input
+            matInput
+            required
+            name="group"
+            [(ngModel)]="filters.group"
+            placeholder="Введите номер группы"
+            aria-label="Groups"
+            (input)="search({type: 'group', data: searchGroup.value})"
+            (ngModelChange)="buildEvents(filters); show = true;"
+            #searchGroup
+            [matAutocomplete]="autoGroup">
+          <mat-autocomplete #autoGroup="matAutocomplete" [displayWith]="DisplayFn(Groups)">
+            <mat-option *ngFor="let group of Groups" [value]="group.id" (click)="saveGroup(group.id)">
+              <span>{{group.name}}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+  <!--        <mat-form-field class="example-full-width">-->
+  <!--          <input-->
+  <!--            matInput-->
+  <!--            required-->
+  <!--            name="teachers"-->
+  <!--            [(ngModel)]="filters.teacher"-->
+  <!--            placeholder="Teachers"-->
+  <!--            aria-label="Lessons"-->
+  <!--            (input)="search({type: 'teacher', data: searchTeacher.value})"-->
+  <!--            #searchTeacher-->
+  <!--            [matAutocomplete]="autoTeacher">-->
+  <!--          <mat-autocomplete #autoTeacher="matAutocomplete" [displayWith]="DisplayFn(Teachers)">-->
+  <!--            <mat-option *ngFor="let teacher of Teachers" [value]="teacher.id">-->
+  <!--              <span>{{teacher.name}}</span>-->
+  <!--            </mat-option>-->
+  <!--          </mat-autocomplete>-->
+  <!--        </mat-form-field>-->
+  <!--        <mat-form-field class="example-full-width">-->
+  <!--          <input-->
+  <!--            matInput-->
+  <!--            required-->
+  <!--            autocomplete="off"-->
+  <!--            name="lesson"-->
+  <!--            [(ngModel)]="filters.lesson"-->
+  <!--            placeholder="Lessons"-->
+  <!--            aria-label="Lessons"-->
+  <!--            (input)="search({type: 'lesson', data: searchLes.value})"-->
+  <!--            #searchLes-->
+  <!--            [matAutocomplete]="autoLesson">-->
+  <!--          <mat-autocomplete #autoLesson="matAutocomplete" [displayWith]="DisplayFn(Lessons)">-->
+  <!--            <mat-option *ngFor="let lesson of Lessons" [value]="lesson.id">-->
+  <!--              <span>{{lesson.name}}</span>-->
+  <!--            </mat-option>-->
+  <!--          </mat-autocomplete>-->
+  <!--        </mat-form-field>-->
+      </form>
+  </div>
+  <div class="container" *ngIf="show">
+    <div class="calendar-actions">
+      <div class="calendar-date">
+        <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+      </div>
+    </div>
+    <div [ngSwitch]="view">
       <mwl-calendar-week-view
+        *ngSwitchCase="CalendarView.Week"
         precision="minutes"
-        [weekStartsOn]="3"
+        [weekStartsOn]="day"
         [hourSegments]="4"
         [dayStartHour]="8"
+        [refresh]="refresh"
         [dayStartMinute]="0"
-        [dayEndHour]="14"
+        [dayEndHour]="15"
         [viewDate]="viewDate"
         [events]="events"
-        (eventClicked)="handleEvent('Clicked', $event.event)"
+        (eventClicked)="handleEvent($event)"
         (eventTimesChanged)="eventTimesChanged($event)">
       </mwl-calendar-week-view>
+
+      <mwl-calendar-day-view
+        *ngSwitchCase="CalendarView.Day"
+        [viewDate]="viewDate"
+        [hourSegments]="4"
+        [dayStartHour]="8"
+        [refresh]="refresh"
+        [dayStartMinute]="0"
+        [dayEndHour]="15"
+        [events]="events"
+        (eventClicked)="handleEvent($event)"
+      >
+      </mwl-calendar-day-view>
+    </div>
+  </div>
+  <div class="calendar-actions-bottom" *ngIf="view === CalendarView.Day">
+    <div class="calendar-actions-group">
+      <button
+        mat-raised-button
+        mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="buildEvents()"
+      >
+        Previous
+      </button>
+      <button
+        mat-raised-button
+        color="accent"
+        mwlCalendarToday
+        [(viewDate)]="viewDate"
+        (viewDateChange)="buildEvents()"
+      >
+        Today
+      </button>
+      <button
+        mat-raised-button
+        mwlCalendarNextView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="buildEvents()"
+      >
+        Next
+      </button>
     </div>
   </div>
 </section>
-

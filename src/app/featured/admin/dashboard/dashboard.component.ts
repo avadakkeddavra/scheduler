@@ -1,24 +1,14 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {
-  startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  addHours,
-  addMinutes
-} from 'date-fns';
-import { Subject } from 'rxjs';
-import {
-  CalendarEvent,
-  CalendarEventAction,
-  CalendarEventTimesChangedEvent,
-  CalendarView
-} from 'angular-calendar';
+import {addDays, setHours, setMinutes} from 'date-fns';
+import {Subject} from 'rxjs';
+import {CalendarEvent, CalendarView} from 'angular-calendar';
 import {MatDialog} from '@angular/material';
-import {CreateEventDialogComponent} from '../../../shared/create-event-dialog/create-event-dialog.component';
+import {ScheduleService} from '../../../core/services/schedule.service';
+import {TeacherService} from '../../../core/services/teacher.service';
+import {GroupsService} from '../../../core/services/groups.service';
+import {LessonsService} from '../../../core/services/lessons.service';
+import {InfoService} from "../../../core/services/info.service";
+import {ClassesService} from "../../../core/services/classes.service";
 
 const colors: any = {
   red: {
@@ -44,161 +34,194 @@ const colors: any = {
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  view: CalendarView = CalendarView.Month;
+  view: CalendarView = CalendarView.Week;
+  CurrentEvent = {
+    lesson_id: null,
+    group_id: null,
+    teacher_id: null,
+    day_id: null,
+    lesson_time_id: null,
+    semester: null,
+    denomirator: null,
+    class_id: null
+  }
+  type = 'create';
 
   CalendarView = CalendarView;
-
+  openDialog = false;
   activeDayIsOpen = true;
   @ViewChild('main')
   mainContainer: ElementRef;
 
   viewDate: Date = new Date();
-  actions: CalendarEventAction[] = [
-    {
-      label: '<i class="fa fa-fw fa-pencil"></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
-      }
-    },
-    {
-      label: '<i class="fa fa-fw fa-times"></i>',
-      onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter(iEvent => iEvent !== event);
-        this.handleEvent('Deleted', event);
-      }
-    }
-  ];
 
-  events: CalendarEvent[] = [
-    {
-      start: new Date('2019-05-23 8:00'),
-      end: new Date('2019-05-23 9:30'),
-      title: 'A 3 day event',
-      color: colors.blue,
-      actions: this.actions,
-      cssClass: '.card',
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    },
-    {
-      start:  new Date('2019-05-23 11:45'),
-      end:  new Date('2019-05-23 13:05'),
-      title: '<b>11:45-13:05</b> <br/> An event with no end date',
-      color: colors.blue,
-      actions: this.actions
-    },
-    {
-      start: new Date('2019-05-23 9:45'),
-      end: new Date('2019-05-23 11:15'),
-      title: 'A draggable and resizable event',
-      color: colors.green,
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true
-      },
-      draggable: true
-    }
-  ];
+  events: CalendarEvent[] = [];
   refresh: Subject<any> = new Subject();
-  constructor( public dialog: MatDialog) { }
+  Schdeule;
+  Teachers;
+  Lessons;
+  Days;
+  Groups;
+  Classes;
+  LessonTimes;
+
+  day = new Date().getDay();
+  constructor(
+    public dialog: MatDialog,
+    private schedule: ScheduleService,
+    private teacher: TeacherService,
+    private group: GroupsService,
+    private lesson: LessonsService,
+    private info: InfoService,
+    private classes: ClassesService,
+  ) { }
   ngOnInit() {
+    this.getGroups();
+    this.getTeacher();
+    this.getLessons();
+    this.getDays();
+    this.getTimes();
+    this.getClasses();
+    this.buildEvents();
   }
 
-
-  openDialog(): void {
-    const dialogRef = this.dialog.open(CreateEventDialogComponent, {
-      width: '80vw',
-      data: {
-        times: [
-          {
-            name: '8:00',
-            value: {
-              hours: 8,
-              minutes: 0
-            },
-          },
-          {
-            name: '10:30',
-            value: {
-              hours: 10,
-              minutes: 30
-            }
-          }
-        ]
-      }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      console.log(result);
-      const event = {
-        title: result.title,
-        start: new Date(result.date).setHours(result.start.hours, result.start.minutes),
-        end: new Date(result.date).setHours(result.end.hours, result.end.minutes),
-        color: colors.green,
-        actions: this.actions,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true
-        },
-        draggable: true
-      };
-      console.log(event);
-      this.addEvent(event);
+  buildEvents() {
+    this.schedule.getAll({day: this.day }).subscribe((data) => {
+      this.Schdeule = data;
+      if (this.view === CalendarView.Day) { return; }
+      const events = [];
+      this.Schdeule.forEach((schedule, index) => {
+        const date = addDays(this.viewDate, index);
+        schedule.schedules.forEach((item) => {
+          const minutesEnd = Number(item.lesson_time.end.split(':')[1]);
+          const minutesStart = Number(item.lesson_time.start.split(':')[1]);
+          const hoursStart = Number(item.lesson_time.start.split(':')[0]);
+          const hoursEnd = Number(item.lesson_time.end.split(':')[0]);
+          const startDate = setHours(setMinutes(date, minutesStart), hoursStart);
+          const endDate = setHours(setMinutes(date, minutesEnd), hoursEnd);
+          events.push({
+            id: item.id,
+            data: item,
+            start: startDate,
+            end: endDate,
+            title: `
+              <b>${item.lesson_time.start} - ${item.lesson_time.end}</b><br>
+              <b>${item.class.name} аудитория</b><br>
+              <b>${item.teacher.name}</b><br>
+              <b>${item.denomirator === 1 ? 'Числитель' : 'Знаментель'}</b><br>
+              <h5>
+              ${item.lesson.name}</h5>
+            `,
+            color: item.denomirator === 1 ? colors.green : colors.blue,
+          });
+        });
+      });
+      this.events = events;
     });
   }
-
+  dropEvent() {
+    this.CurrentEvent = {
+      lesson_id: null,
+      group_id: null,
+      teacher_id: null,
+      day_id: null,
+      lesson_time_id: null,
+      semester: null,
+      denomirator: null,
+      class_id: null
+    }
+  }
   setView(view: CalendarView) {
     this.view = view;
-  }
-
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    console.log(date, events);
-    if (isSameMonth(date, this.viewDate)) {
-      this.viewDate = date;
-      if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
-        this.activeDayIsOpen = false;
-      } else {
-        this.activeDayIsOpen = true;
-      }
-    }
-  }
-  handleEvent(action: string, event: CalendarEvent): void {
-    console.log(action, event);
-  }
-
-  eventTimesChanged({
-                      event,
-                      newStart,
-                      newEnd
-                    }: CalendarEventTimesChangedEvent): void {
-    this.events = this.events.map(iEvent => {
-      if (iEvent === event) {
-        return {
-          ...event,
-          start: newStart,
-          end: newEnd
-        };
-      }
-      return iEvent;
-    });
-    this.handleEvent('Dropped or resized', event);
   }
   closeOpenMonthViewDay() {
     this.activeDayIsOpen = false;
   }
 
   addEvent(event): void {
-    this.events = [
-      ...this.events,
-      event
-    ];
+    this.openDialog = false;
+    this.schedule.create(event).subscribe((data) => {
+      this.buildEvents();
+    });
+  }
+
+  updateEvent({id, data}) {
+    this.openDialog = false;
+    this.schedule.update(id, data).subscribe((data) => {
+      this.buildEvents();
+    })
+  }
+
+  deleteEvent(id: number) {
+    this.schedule.delete(id).subscribe((data) => {
+      this.events.forEach((item, index) => {
+        if(item.id === id) {
+          this.events.splice(index, 1);
+        }
+      });
+      this.openDialog = false;
+      this.refresh.next(this.events)
+    })
+  }
+
+  getTeacher(search: string = '') {
+    this.teacher.getAll(search).subscribe((data) => {
+      this.Teachers = data;
+    });
+  }
+
+  getGroups(search: string = '') {
+    this.group.getWithSearch(search).subscribe((data) => {
+      this.Groups = data;
+    });
+  }
+
+  getLessons(search: string = '') {
+    this.lesson.getAll(search).subscribe((data) => {
+      this.Lessons = data;
+    });
+  }
+
+  getDays() {
+    this.info.getDays().subscribe((data) => {
+      this.Days = data;
+    })
+  }
+
+  getTimes() {
+    this.info.getTimes().subscribe((data) => {
+      this.LessonTimes = data;
+    })
+  }
+  getClasses(search: string = '') {
+    this.classes.getAll(search).subscribe((data) => {
+      this.Classes = data;
+    })
+  }
+
+  search(searchData: {type: string, data: any}) {
+    const {type, data} = searchData;
+
+    switch (type) {
+      case 'lesson':
+        this.getLessons(data);
+        break;
+      case 'teacher':
+        this.getTeacher(data);
+        break;
+      case 'group':
+        this.getGroups(data);
+        break;
+      case 'classes':
+        this.getClasses(data);
+        break;
+    }
+  }
+  handleEvent($event) {
+    const {event} = $event;
+    this.CurrentEvent = event.data;
+    console.log(this.CurrentEvent);
+    this.type = 'edit';
+    this.openDialog = true;
   }
 }

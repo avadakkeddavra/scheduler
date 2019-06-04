@@ -31,10 +31,25 @@ export class TeacherService {
     delete dataSend.token;
     return this.http.put(environment.api + `/teachers/${id}`, dataSend);
   }
-  getAll(params: any) {
-    return this.http.get(environment.api + '/teachers', {params}).pipe(
+  getAll(search: string = '') {
+    return this.http.get(environment.api + '/teachers', {params: {search}}).pipe(
       map((data: any) => {
         return data;
+      })
+    );
+  }
+
+  getAllWithPagination(params: any) {
+    return this.http.get(environment.api + '/teachers/all', {params}).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  }
+  refreshToken(id) {
+    return this.http.get(environment.api + `/teachers/${id}/refresh`).pipe(
+      map((data: {token: string}) => {
+        return data.token;
       })
     );
   }

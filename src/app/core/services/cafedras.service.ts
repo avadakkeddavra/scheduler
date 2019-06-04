@@ -21,11 +21,25 @@ export class CafedrasService {
   }
 
   update(id: number, data: Cafedra) {
-    return this.http.post(environment.api + '/cafedras', data);
+    return this.http.put(environment.api + '/cafedras/' + id, {
+      name: data.name
+    });
   }
 
   getAll(): Observable<Cafedra[]> {
     return this.http.get(environment.api + '/cafedras').pipe(
+      map((data: Cafedra[]) => {
+        return data;
+      })
+    );
+  }
+
+  bulkDelete(ids: number[]) {
+    return this.http.post(environment.api + `/cafedras/delete`, {ids});
+  }
+
+  getAllWithPagintaion(params: any): Observable<Cafedra[]> {
+    return this.http.get(environment.api + '/cafedras/all', {params}).pipe(
       map((data: Cafedra[]) => {
         return data;
       })

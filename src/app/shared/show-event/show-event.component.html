@@ -1,0 +1,41 @@
+<h1 mat-dialog-title>{{data.lesson.name}}</h1>
+<div mat-dialog-content class="body">
+  <mat-list>
+    <mat-list-item>
+      <mat-icon mat-list-icon>schedule</mat-icon>
+      <h4 mat-line>Начало</h4>
+      <p mat-line> {{data.lesson_time.start}} </p>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon></mat-icon>
+      <h4 mat-line>Конец</h4>
+      <p mat-line> {{data.lesson_time.end}} </p>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>timer</mat-icon>
+      <h4 mat-line>{{data.denomirator === 1 ? 'Числитель' : 'Знаменатель'}}</h4>
+    </mat-list-item>
+  </mat-list>
+  <mat-list>
+    <mat-list-item>
+      <mat-icon mat-list-icon>person</mat-icon>
+      <h4 mat-line>Преподаватель</h4>
+      <p mat-line> {{data.teacher.name}} </p>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon mat-list-icon>timeline</mat-icon>
+      <h4 mat-line>До звонка</h4>
+      <p mat-line> {{getTimeDiff()}} </p>
+    </mat-list-item>
+  </mat-list>
+  <mat-list>
+    <mat-list-item>
+      <mat-icon mat-list-icon>place</mat-icon>
+      <h4 mat-line>Аудитория</h4>
+      <p mat-line> {{data.class.name}} </p>
+    </mat-list-item>
+  </mat-list>
+</div>
+<div mat-dialog-actions>
+
+</div>

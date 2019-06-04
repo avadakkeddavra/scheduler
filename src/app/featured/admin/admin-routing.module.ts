@@ -6,7 +6,7 @@ import {AuthGuard} from '../../core/guards/auth.guard';
 import {GroupsComponent} from './groups/groups.component';
 import {CafedrasComponent} from './cafedras/cafedras.component';
 import {TeachersComponent} from './teachers/teachers.component';
-import {TimetableComponent} from './timetable/timetable.component';
+import {LessonsComponent} from './lessons/lessons.component';
 
 const routes: Routes = [
   {
@@ -38,10 +38,10 @@ const routes: Routes = [
         component: TeachersComponent
       },
       {
-        path: 'timetable',
+        path: 'lessons',
         canActivate: [AuthGuard],
-        component: TimetableComponent
-      },
+        component: LessonsComponent
+      }
     ]
   }
 ];

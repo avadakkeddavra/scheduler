@@ -1,6 +1,6 @@
-<section class="login">
+<section class="login" >
   <mat-icon class="logo">schedule</mat-icon>
-  <mat-card>
+  <mat-card *ngIf="isAdmin">
     <form #form="ngForm" (ngSubmit)="onSubmit(form)">
       <mat-form-field class="example-full-width">
         <input matInput type="email" placeholder="Email" name="email" [(ngModel)]="User.email" required/>
@@ -11,8 +11,20 @@
       </mat-form-field>
 
       <div class="actions">
-        <button mat-raised-button color="accent">Login</button>
-        <button mat-raised-button color="primary">Forgot password</button>
+        <button mat-raised-button color="privary">Login</button>
+        <button type="button" mat-raised-button color="accent" (click)="toggleAuth()">Login as teacher</button>
+      </div>
+    </form>
+  </mat-card>
+  <mat-card *ngIf="!isAdmin">
+    <form #formTeacher="ngForm" (ngSubmit)="onSubmitTeacher()">
+      <mat-form-field class="example-full-width">
+        <input matInput type="text" placeholder="Token" name="email" [(ngModel)]="Token" required/>
+      </mat-form-field>
+
+      <div class="actions">
+        <button mat-raised-button color="primary" [disabled]="formTeacher.invalid || formTeacher.untouched">Login</button>
+        <button type="button" mat-raised-button color="accent" (click)="toggleAuth()">Login as admin</button>
       </div>
     </form>
   </mat-card>

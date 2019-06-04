@@ -31,7 +31,14 @@ export class GroupsService {
   }
 
   getAll(params) {
-    return this.http.get(environment.api + '/groups', {params}).pipe(
+    return this.http.get(environment.api + '/groups/all', {params}).pipe(
+      map((data: Group[]) => {
+        return data;
+      })
+    );
+  }
+  getWithSearch(search?: string) {
+    return this.http.get(environment.api + '/groups', {params: {search}}).pipe(
       map((data: Group[]) => {
         return data;
       })

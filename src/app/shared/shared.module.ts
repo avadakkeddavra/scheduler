@@ -8,9 +8,20 @@ import {MatDatepickerModule, MatNativeDateModule} from '@angular/material';
 import {RouterModule} from '@angular/router';
 import { CreateGroupDialogComponent } from './create-group-dialog/create-group-dialog.component';
 import { CreateTeacherDialogComponent } from './create-teacher-dialog/create-teacher-dialog.component';
+import { CreateCafedraDialogComponent } from './create-cafedra-dialog/create-cafedra-dialog.component';
+import { CreateLessonDialogComponent } from './create-lesson-dialog/create-lesson-dialog.component';
+import { ShowEventComponent } from './show-event/show-event.component';
 
 @NgModule({
-  declarations: [TopbarComponent, CreateEventDialogComponent, CreateGroupDialogComponent, CreateTeacherDialogComponent],
+  declarations: [
+    TopbarComponent,
+    CreateEventDialogComponent,
+    CreateGroupDialogComponent,
+    CreateTeacherDialogComponent,
+    CreateCafedraDialogComponent,
+    CreateLessonDialogComponent,
+    ShowEventComponent
+  ],
   imports: [
     CommonModule,
     MaterialModule,
@@ -24,8 +35,16 @@ import { CreateTeacherDialogComponent } from './create-teacher-dialog/create-tea
     TopbarComponent,
     CreateEventDialogComponent,
     CreateGroupDialogComponent,
+    CreateCafedraDialogComponent,
     MatNativeDateModule
   ],
-  bootstrap: [CreateGroupDialogComponent, CreateEventDialogComponent, CreateTeacherDialogComponent]
+  bootstrap: [
+    CreateGroupDialogComponent,
+    CreateEventDialogComponent,
+    CreateTeacherDialogComponent,
+    CreateCafedraDialogComponent,
+    CreateLessonDialogComponent,
+    ShowEventComponent
+  ]
 })
 export class SharedModule { }
